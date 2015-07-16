@@ -1,9 +1,11 @@
 package com.compass.microservices.model;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
 
+@Document(collection = "projects")
 public class Project {
 	
 	@Id
@@ -11,6 +13,7 @@ public class Project {
 	private String name;
 	private String description;
 	private List<String> tags;
+	
 	public String getId() {
 		return id;
 	}
