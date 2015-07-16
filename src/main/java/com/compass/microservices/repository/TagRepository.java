@@ -10,6 +10,6 @@ public interface TagRepository extends MongoRepository<Tag, String>{
 	List<Tag> findAll();
 	Tag findOne(String id);
 	Tag insert(Tag tag);
-	Tag update(Tag tag);
+	Tag save(Tag tag);
 	void delete(String id);
 }

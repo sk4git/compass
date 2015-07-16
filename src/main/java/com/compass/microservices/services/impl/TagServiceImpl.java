@@ -3,10 +3,13 @@ package com.compass.microservices.services.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.compass.microservices.model.Tag;
 import com.compass.microservices.repository.TagRepository;
 import com.compass.microservices.services.TagService;
 
+@Service
 public class TagServiceImpl implements TagService {
 	private TagRepository tagRepository;
 
@@ -22,7 +25,7 @@ public class TagServiceImpl implements TagService {
 
 	@Override
 	public Tag update(Tag tag) {
-		return tagRepository.update(tag);
+		return tagRepository.save(tag);
 	}
 
 	@Override
