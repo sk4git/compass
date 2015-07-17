@@ -21,10 +21,10 @@ import com.jayway.restassured.RestAssured;
 
 import static com.jayway.restassured.RestAssured.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)   // 1
-@SpringApplicationConfiguration(classes = Application.class)   // 2
-@WebAppConfiguration   // 3
-@IntegrationTest("server.port:0")   // 4
+@RunWith(SpringJUnit4ClassRunner.class)   
+@SpringApplicationConfiguration(classes = Application.class)   
+@WebAppConfiguration   
+@IntegrationTest("server.port:0")  
 public class ProjectRestControllerTest {
 	@Autowired
 	ProjectService service;

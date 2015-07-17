@@ -2,10 +2,12 @@ package com.compass.microservices.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,16 @@ public class ProjectRestController {
 	@RequestMapping(method=RequestMethod.GET, value="{id}")
 	  public Project getById(@PathVariable String id) {
 	    return service.findOne(id);
+	  }
+	
+	@RequestMapping(method=RequestMethod.GET,value="/search")
+	  public Project getByName(@RequestParam("name") String name) {
+		return service.findByName(name);
+	  }
+	
+	@RequestMapping(method=RequestMethod.GET,value="/tags")
+	  public List<Project> getByTagName(@RequestParam("name") String tags) {
+	    return service.findAllByTagName(tags);
 	  }
 	  
 	  @RequestMapping(method=RequestMethod.POST)

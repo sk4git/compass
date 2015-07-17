@@ -11,4 +11,6 @@ public interface ProjectService {
 	
 	void delete(Project project);
 	Project findOne(String id);
+	Project findByName(String name);
+	List<Project> findAllByTagName(String tags);
 }
