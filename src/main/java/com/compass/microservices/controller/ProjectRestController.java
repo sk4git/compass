@@ -41,9 +41,9 @@ public class ProjectRestController {
 		return service.findByName(name);
 	  }
 	
-	@RequestMapping(method=RequestMethod.GET,value="/tags")
-	  public List<Project> getByTagName(@RequestParam("name") String tags) {
-	    return service.findAllByTagName(tags);
+	@RequestMapping(method=RequestMethod.GET,value="/tagged/{tag}")
+	  public List<Project> getByTagName(@PathVariable String tag) {
+	    return service.findAllByTagName(tag);
 	  }
 	  
 	  @RequestMapping(method=RequestMethod.POST)
