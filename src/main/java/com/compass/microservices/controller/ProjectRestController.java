@@ -42,9 +42,11 @@ public class ProjectRestController {
 	  }
 	
 	@RequestMapping(method=RequestMethod.GET,value="/tagged/{tag}")
-	  public List<Project> getByTagName(@PathVariable String tag) {
+	  public List<Project> getByTagName(@PathVariable("tag") List<String> tag) {
 	    return service.findAllByTagName(tag);
 	  }
+	
+	
 	  
 	  @RequestMapping(method=RequestMethod.POST)
 	   @ResponseStatus(HttpStatus.CREATED)

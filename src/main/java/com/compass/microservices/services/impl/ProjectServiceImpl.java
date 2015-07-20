@@ -55,5 +55,10 @@ private final ProjectRepository projectRepository;
 		// TODO Auto-generated method stub
 		return projectRepository.findAllByTagName(tag);
 	}
+	@Override
+	public List<Project> findAllByTagName(List<String> tags) {
+		// TODO Auto-generated method stub
+		return projectRepository.findAllByTagName(tags);
+	}
 
 }

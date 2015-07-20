@@ -13,4 +13,5 @@ public interface ProjectService {
 	Project findOne(String id);
 	Project findByName(String name);
 	List<Project> findAllByTagName(String tags);
+	List<Project> findAllByTagName(List<String> tags);
 }

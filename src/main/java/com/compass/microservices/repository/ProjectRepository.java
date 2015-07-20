@@ -18,7 +18,10 @@ public interface ProjectRepository extends MongoRepository<Project, String>,Cust
 	  
 	@Query("{'name': ?0 }")
 	Project findByName(String name);
-	
+
 	@Query("{ 'tags' : ?0 }")
-	List<Project> findAllByTagName(String tag);
+			List<Project> findAllByTagName(String tag);
+	
+	@Query("{ 'tags' : { $in : ?0 } }")
+	List<Project> findAllByTagName(List<String> tag);
 }
