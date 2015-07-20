@@ -1,6 +1,8 @@
 package compass;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
@@ -64,6 +66,7 @@ public class ProjectRestControllerTest {
 	
     Project fNf;
     Project horizon;
+	Project compass;
 
 
     @Value("${local.server.port}")   // 6
@@ -84,11 +87,7 @@ public class ProjectRestControllerTest {
         DB db = mongo.getDB(DB_NAME);
         //DBCollection col = db.createCollection("projects", new BasicDBObject());
 
-        
-        
-        
-
-    }
+      }
     
     @AfterClass
     public static void shutdownDB() throws InterruptedException {
@@ -100,30 +99,31 @@ public class ProjectRestControllerTest {
     public void tearDown() throws Exception {
        template.dropCollection(Project.class);
     }
-    
-
-
-    
-	
+   	
     @Before
     public void setUp() {
-    	
-        // 7
-    	template = new MongoTemplate(mongo, DB_NAME);
-    	template.createCollection(Project.class);
-    	RestAssured.port = port;
-    	fNf = new Project();
-    	fNf.setName("F&F ecommerce");
-    	horizon = new Project();
-    	horizon.setName("HORIZON ecommerce platform");
-    	//projectRepository.deleteAll();
-    	projectRepository.insert(fNf);
-    	projectRepository.insert(horizon);
-    	//projectRepository.deleteAll();
+		template.createCollection(Project.class);
+		RestAssured.port = port;
+		fNf = new Project();
+		fNf.setName("F&F ecommerce");
+		fNf.setTags(Arrays.asList("java", "spring", "hibernate", "mongodb"));
+		horizon = new Project();
+		horizon.setName("HORIZON ecommerce platform");
+		horizon.setTags(Arrays.asList("java", "spring", "hibernate", "oracle"));
+		compass = new Project();
+		compass.setId("cmpassId001");
+		compass.setName("Compass Search Project");
+		compass.setTags(Arrays.asList("java", "spring", "mongodb",
+				"spring boot"));
+		// projectRepository.deleteAll();
+		projectRepository.insert(fNf);
+		projectRepository.insert(horizon);
+		projectRepository.insert(compass);
+		// projectRepository.deleteAll();
 
     }
     @Test
-    public void testInsert(){
+    public void testFindAllProjectsAndCheckSize(){
     	
         int projectsInCollection = template.findAll(Project.class).size();
         
@@ -143,6 +143,16 @@ public class ProjectRestControllerTest {
                 body("name", Matchers.is("F&F ecommerce")).
                 body("id", Matchers.is(projectId));
     }
+   
+	@Test
+	public void canFetchCompassProject() {
+		String projectId = "cmpassId001";
+
+		when().get("/projects/{id}", projectId).then()
+				.statusCode(HttpStatus.SC_OK)
+				.body("name", Matchers.is("Compass Search Project"))
+				.body("id", Matchers.is(projectId));
+	}
     
    @Test
     public void canFetchAll() {
@@ -152,6 +162,19 @@ public class ProjectRestControllerTest {
                 statusCode(HttpStatus.SC_OK).
                 body("name", Matchers.hasItems("F&F ecommerce", "HORIZON ecommerce platform"));
     }
+   
+	@Test
+	public void canFetchProjectByName() {
+		String name = compass.getName();
+		when().get("/projects/search?name=Compass Search Project")
+				.then()
+				.statusCode(HttpStatus.SC_OK)
+				.body("name", Matchers.equalTo(name))
+				.body("tags",
+						Matchers.hasItems("java", "spring", "mongodb",
+								"spring boot"));
+
+	}
     
     @Test
     public void canDeleteProjectfNf() {
@@ -163,7 +186,46 @@ public class ProjectRestControllerTest {
                 statusCode(HttpStatus.SC_OK);
     }
     
-    
+	@Test
+	public void canFetchByTagJavaSpringMongoDb() {
+		List<String> tags = Arrays.asList("java", "spring", "mongodb");
+		when().get("/projects/tagged/{tag}", tags)
+				.then()
+				.statusCode(HttpStatus.SC_OK)
+				.body("name",
+						Matchers.hasItems("F&F ecommerce",
+								"Compass Search Project"));
+	}
+
+	@Test
+	public void canFetchByTagJavaSpringHibernate() {
+		List<String> tags = Arrays.asList("java", "spring", "hibernate");
+		when().get("/projects/tagged/{tag}", tags)
+				.then()
+				.statusCode(HttpStatus.SC_OK)
+				.body("name",
+						Matchers.hasItems("F&F ecommerce",
+								"HORIZON ecommerce platform"));
+	}
+
+	@Test
+	public void fetchOnlyHorizonProjectBySearchingOracleTag() {
+		List<String> tags = Arrays.asList("oracle");
+		when().get("/projects/tagged/{tag}", tags)
+				.then()
+				.statusCode(HttpStatus.SC_OK)
+				.body("name",
+						Matchers.not(Matchers.hasItems("F&F ecommerce",
+								"Compass Search Project")));
+	}
+
+	@Test
+	public void NoProjectFoundOnSearchingByMissingTechnologyTag() {
+		List<String> tags = Arrays.asList("missing technology");
+		when().get("/projects/tagged/{tag}", tags).then()
+				.statusCode(HttpStatus.SC_OK).body("name", Matchers.empty());
+	}
+
 
     
     @Test
@@ -175,31 +237,7 @@ public class ProjectRestControllerTest {
         then().
                 statusCode(HttpStatus.SC_OK);
     }
+   
     
-    /*@Test
-    public void canDeleteProjectNotThere() {
-    	String projectId1 = horizon.getId();
-    	String response = delete("/projects/{id}", projectId1).andReturn().body().asString();
-        when()
-                .delete("/projects/{id}", projectId1).
-        then().
-                statusCode(HttpStatus.SC_NO_CONTENT);
-    }*/
-    
-   /* @After
-    public void tearDown() {
-    	if(horizon.getId()!=null){
-    	System.out.println("horizon id"+horizon.getId());
-    	String uri = "/projects/"+horizon.getId();
-    	String response = delete(uri).andReturn().body().asString();
-    	System.out.println(response);
-    	}
-    	if(fNf.getId()!=null)
-    	{	
-    		String uri = "/projects/"+fNf.getId();
-    		String response1 = delete(uri).andReturn().body().asString();
-    		System.out.println(response1);
-    	}
-    }*/
 }
 
