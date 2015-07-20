@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: compass.ProjectRestControllerTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 1.852 sec <<< FAILURE! - in compass.ProjectRestControllerTest
+compass.ProjectRestControllerTest  Time elapsed: 1.851 sec  <<< ERROR!
+de.flapdoodle.embed.process.exceptions.DistributionException: java.io.IOException: Could not create Tempfile: /var/folders/tc/h8l87nws57x238zkjf2nftk19k12d0/T/extract-braje2-mongod
+	at de.flapdoodle.embed.process.io.file.Files.createTempFile(Files.java:60)
+	at de.flapdoodle.embed.process.runtime.Starter.extractExe(Starter.java:89)
+	at de.flapdoodle.embed.mongo.MongodStarter.extractExe(MongodStarter.java:61)
+	at de.flapdoodle.embed.process.runtime.Starter.prepare(Starter.java:70)
+	at compass.ProjectRestControllerTest.initializeDB(ProjectRestControllerTest.java:80)
+
+compass.ProjectRestControllerTest  Time elapsed: 1.852 sec  <<< ERROR!
+java.lang.NullPointerException: null
+	at compass.ProjectRestControllerTest.shutdownDB(ProjectRestControllerTest.java:95)
+

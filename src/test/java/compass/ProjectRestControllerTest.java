@@ -82,12 +82,18 @@ public class ProjectRestControllerTest {
  
         mongo = new Mongo(LOCALHOST, MONGO_TEST_PORT);
         DB db = mongo.getDB(DB_NAME);
-        DBCollection col = db.createCollection("projects", new BasicDBObject());
+        //DBCollection col = db.createCollection("projects", new BasicDBObject());
 
         
         
         
 
+    }
+    
+    @AfterClass
+    public static void shutdownDB() throws InterruptedException {
+        mongo.close();
+        mongoProcess.stop();
     }
     
     @After
